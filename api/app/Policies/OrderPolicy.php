@@ -9,6 +9,22 @@ use Illuminate\Auth\Access\Response;
 class OrderPolicy
 {
     /**
+     * Determine whether the user can view any orders.
+     */
+    public function viewAny(User $user): bool
+    {
+        return $user->role === 'admin' || $user->role === 'agent';
+    }
+
+    /**
+     * Determine whether the user can create an order.
+     */
+    public function create(User $user): bool
+    {
+        return $user->role === 'admin' || $user->role === 'agent';
+    }
+
+    /**
      * Determine whether the user can view the estimated cost of the order.
      */
     public function viewCost(User $user, Order $order): bool
@@ -25,7 +41,7 @@ class OrderPolicy
     /**
      * Determine whether the user can cancel the order.
      */
-    public function cancel(User $user, Order $order): bool
+    public function cancel(User $user): bool
     {
         // Only admin can cancel an order
         return $user->role === 'admin';
@@ -34,7 +50,7 @@ class OrderPolicy
     /**
      * Determine whether the user can assign a technician.
      */
-    public function assignTechnician(User $user, Order $order): bool
+    public function assignTechnician(User $user): bool
     {
         return $user->role === 'admin' || $user->role === 'agent';
     }
@@ -42,7 +58,7 @@ class OrderPolicy
     /**
      * Determine whether the user can mark an order as done.
      */
-    public function markAsDone(User $user, Order $order): bool
+    public function markAsDone(User $user): bool
     {
         return $user->role === 'admin' || $user->role === 'agent';
     }
