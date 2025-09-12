@@ -1,61 +1,96 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+Prueba Técnica: Mini OMS - Órdenes de Servicio
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+Este proyecto es una aplicación web de gestión de órdenes de servicio, que consta de un backend API construido con Laravel y un frontend desarrollado con Vue 3. La aplicación permite la gestión de órdenes de servicio, incluyendo la creación, asignación, cambio de estado y cálculo de costos.
+Criterios de la Prueba
 
-## About Laravel
+El proyecto cumple con los siguientes criterios de la prueba técnica:
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+    Backend (Laravel):
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+        Implementación de un API RESTful para la gestión de órdenes.
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+        Autenticación mediante Sanctum.
 
-## Learning Laravel
+        Control de acceso y autorización con Policies/Gates para restringir acciones por rol (admin y agent).
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+        Pruebas operativas (php artisan test) que incluyen:
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+            Una prueba unitaria (Tests\Unit\ExampleTest).
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+            Pruebas de característica (Tests\Feature\OrdersApiTest) que validan los endpoints de la API.
 
-## Laravel Sponsors
+        Un Job (NotifyOrderClosed) que se despacha al marcar una orden como "done" y registra la acción en los logs.
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+        Validación de datos con Form Requests y manejo de errores con respuestas JSON apropiadas.
 
-### Premium Partners
+    Frontend (Vue 3):
 
-- **[Vehikl](https://vehikl.com)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Redberry](https://redberry.international/laravel-development)**
-- **[Active Logic](https://activelogic.com)**
+        Vista de lista con filtros reactivos por estado.
 
-## Contributing
+        Vista de detalle de la orden.
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+        Interfaz para asignar un técnico y cambiar el estado de una orden.
 
-## Code of Conduct
+        Manejo de errores mediante notificaciones de UI.
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+    DevOps y CI:
 
-## Security Vulnerabilities
+        Configuración del entorno de desarrollo con Docker Compose para la aplicación y la base de datos MySQL.
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+        Un script de CI (ci.sh) que automatiza la instalación de dependencias, la configuración de la base de datos y la ejecución de las pruebas.
 
-## License
+Requisitos
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+    Docker y Docker Compose instalados.
+
+Configuración del Entorno de Desarrollo
+
+    Clonar el repositorio:
+
+    git clone <URL_DEL_REPOSITORIO>
+    cd <NOMBRE_DEL_DIRECTORIO>
+
+    Configurar el entorno:
+
+        Copia el archivo .env.example a .env y ajusta las variables de entorno si es necesario.
+
+        Asegúrate de que las credenciales de la base de datos en el .env coincidan con las de docker-compose.yml.
+
+    Construir y levantar los contenedores de Docker:
+
+    docker-compose up --build -d
+
+    Instalar dependencias de Composer y Node.js:
+
+    docker-compose exec -T app composer install
+    docker-compose exec -T app npm install
+
+    Ejecutar migraciones y seeders:
+
+    docker-compose exec -T app php artisan migrate --seed
+
+    Generar la clave de la aplicación:
+
+    docker-compose exec -T app php artisan key:generate
+
+    Iniciar el servidor de desarrollo de Laravel:
+
+    docker-compose exec -T app php artisan serve
+
+    Iniciar el servidor de desarrollo de Vue:
+
+    docker-compose exec -T app npm run dev
+
+La API estará disponible en http://localhost:8000 y el frontend en http://localhost:5173.
+Cómo Correr el CI
+
+Para ejecutar el pipeline de CI, simplemente corre el siguiente script desde la raíz del proyecto. Este script automatizará la configuración del entorno, la base de datos y la ejecución de las pruebas.
+
+sh ci.sh
+
+Pruebas de la Aplicación
+
+Para correr las pruebas directamente desde el contenedor de Laravel, utiliza el siguiente comando:
+
+docker-compose exec -T app php artisan test
+
